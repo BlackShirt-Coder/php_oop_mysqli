@@ -17,7 +17,7 @@ class index
        ];
 //       $this->db->insertMultipleShops($shops);
 //       $this->db->updateName("Asus",6);
-       $this->db->deleteData(1);
+       $this->db->fetchAll(1);
    }
 
 }

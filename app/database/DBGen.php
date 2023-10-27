@@ -84,7 +84,33 @@ class DBGen
         $stmt = $this->conn->prepare("delete from shops where id=?");
         $stmt->bind_param("i", $id);
         $result = $stmt->execute();
-        echo $result?"Delete Successfully":"Failed to Delete" ;
+        echo $result ? "Delete Successfully" : "Failed to Delete";
+    }
+
+    public function dataJoin($state)
+    {
+        $stmt = $this->conn->prepare("select shops.name,dishes.name ,(orders.price * orders.amount) as total  from shops left join dishes on shops.id=dishes.shop_id inner join orders on orders.dishId=dishes.id where dishes.state=?");
+        $stmt->bind_param("i", $state);
+        $result = $stmt->execute();
+        $stmt->bind_result($shop, $dish, $total);
+
+        while ($stmt->fetch()) {
+            echo $shop . "<br>" . $dish . "<br>" . $total . "<hr>";
+        }
+
+    }
+
+    public function fetchAll($state)
+    {
+        $stmt = $this->conn->prepare("select * from shops where state=?");
+        $stmt->bind_param("i", $state);
+        $stmt->execute();
+        $rows = $stmt->get_result();
+        $rows->fetch_all();
+        foreach ($rows as $res){
+//            echo "<pre>".print_r($res,true)."</pre>";
+            echo $res["name"]."<hr>";
+        }
     }
 
 }
